@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <div id="welcome-message"></div>
+    <div id="error-message"></div>
+
+    <button id="logout-button"></button>
+
+    <a id="error-login" style="display: none;" href="http://localhost:5000">Back to Login</a>
+
+
+<script>
+    const welcomeMessageElement = document.getElementById('welcome-message');
+    const errorMessageElement = document.getElementById('error-message');
+    const logoutButtonElement = document.getElementById('logout-button');
+    const errorLoginElement = document.getElementById('error-login');
+
+    const loggedIn = Boolean(window.localStorage.getItem('loggedIn')) || false;
+
+    if(loggedIn === true)
+    {
+        axios.get('/user')
+        .then(res =>
+        {
+            console.log(res.data.user);
+
+            const { username } = res.data.user;
+
+            welcomeMessageElement.innerText = `Welcome %{ username }, how are you?`;
+        })
+    }
+    else
+    {
+        errorMessageElement.innerText = "User is not loggedin";
+        logoutButtonElement.style.display = "none";
+        errorLoginElement.style.display = "block";
+    }
+
+    logoutButtonElement.onclick = (e) =>
+    {
+        window.localStorage.clear();
+        window.localStorage.href = "http://localhost:5000";
+    }
+
+
+</script>    
+</body>
+</html>
